@@ -1,0 +1,81 @@
+
+<div class="flex justify-content-center align-content-center" style="min-height: 200px">
+  
+  <div class="surface-card p-4 shadow-2 border-round w-4">
+    <div class="text-center mb-5">
+        <div class="text-900 text-3xl font-medium mb-3">Vending Machine</div>
+        <span class="text-600 font-medium line-height-3">All you can eat food machine</span>
+    </div>
+    <div>
+      <div class="field">
+        <label for="country" class="block text-900 font-medium mb-2">Select Currency</label>
+        <!-- <input id="country" type="text" placeholder="Email address" pInputText class="w-full mb-3"> -->
+        <p-dropdown
+              [options]="countries"
+              [(ngModel)]="selectedCountry"
+              optionLabel="name"
+              placeholder="Select a Country"
+              (onChange)="changeCoinDenominations()"
+              class="w-full mb-3"
+            >
+              <ng-template pTemplate="selectedItem">
+                <div class="flex align-items-center gap-2" *ngIf="selectedCountry">
+                  <img
+                    [src]="selectedCountry.image"
+                    [class]="'flag flag-' + selectedCountry.code.toLowerCase()"
+                  />
+                  <div>{{ selectedCountry.name }}</div>
+                </div>
+              </ng-template>
+              <ng-template let-country pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                  <img
+                    [src]="country.image"
+                    [class]="'flag flag-' + country.code.toLowerCase()"
+                  />
+                  <div>{{ country.name }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+      </div>
+
+      <div class="field">
+        <label for="purchaseAmount" class="block text-900 font-medium mb-2">Purchase Amount</label>
+        <p-inputNumber
+              [(ngModel)]="calculationRequest.purchaseAmount"
+              inputId="purchaseAmount"
+              mode="currency"
+              [currency]="selectedCountry.code"
+              locale="en-US"
+              [disabled]="true"
+              class="w-full mb-3"
+            >
+            </p-inputNumber>
+          </div>
+
+          <div class="field">
+            <label for="tenderAmount" class="block text-900 font-medium mb-2">Tender Amount</label>
+            <p-inputNumber
+              [(ngModel)]="calculationRequest.tenderAmount"
+              inputId="tenderAmount"
+              mode="currency"
+              [currency]="selectedCountry.code"
+              locale="en-US"
+              class="w-full mb-3"
+            >
+            </p-inputNumber>
+          </div>
+
+        <button pButton pRipple label="Calculate Change"
+        class="p-button p-button-success w-full mx-2"
+        (click)="calculateChange()"></button>
+
+        <p>Change:</p>
+        <div class="card flex align-items-center gap-2 flex-wrap">
+          <ng-container *ngFor="let coin of change">
+            <p-chip [label]="getCurrencySymbol(coin)"></p-chip>
+          </ng-container>
+        </div>
+    </div>
+  </div>
+</div>
